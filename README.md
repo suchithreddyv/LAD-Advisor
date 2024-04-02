@@ -68,7 +68,40 @@ To create a API Header Authorization Token , In your Canvas Instructure Account 
 Copy that access token , Set it's expiry date and put that token in the views.py
 
 #### 6.Set up the database (Adjust instructions based on your database choice - Here I've used MySQL)
+
+This project uses MySQL as its database backend. Follow these steps to configure your MySQL database with Django.
+
+**Prerequisites**
+- MySQL Server installed on your machine.
+- MySQL Client for connecting to the server (usually included with the server installation).
+- Install MySQL Python dependencies
+- Django requires mysqlclient to interface with MySQL databases. 
+
+Install it using pip: pip install mysqlclient
+
+Then create database and other basic settings in MySQL.
+
+**Configure Django to Use MySQL**
+- Modify settings.py
+- Open your Django project's settings.py file.
+- Find the DATABASES setting and update it to match your MySQL database configuration:
+
+  DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'yourdbname',
+        'USER': 'yourusername',
+        'PASSWORD': 'yourpassword',
+        'HOST': 'localhost',  # Or an IP Address that your DB is hosted on
+        'PORT': '3306',
+    }
+}
+
+**Apply migrations**
+To create the necessary database tables, run:
+
 python manage.py makemigrations
+
 python manage.py migrate
 
 #### 7.Run the development server
