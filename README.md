@@ -34,7 +34,7 @@
 ## Setup Instructions 
 
 #### Prerequisites:
-- **Django:** Make sure to have Django installed. If not, install it using pip: pip install Django==4.1.1.
+- **Django:** Make sure to have Django installed. If not, install it using pip: ```pip install Django==4.1.1.```
 - **Canvas LMS Account:** We'll need access to a Canvas Instructure LMS instance where we can configure and use the Dashboard. So, we need to create an instructor account.
 - **Database Server:** We will also require Database to store Histrorical Data. We are using MySQL Server here. 
 
@@ -117,8 +117,9 @@ python manage.py makemigrations
 python manage.py migrate
 ```
 #### 7.Run the development server
+```
 python manage.py runserver
-
+```
 Here we are using SSL Server 
 
 Use the following commands to install and run the SSL server:
