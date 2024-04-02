@@ -1,0 +1,121 @@
+.options-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px; 
+    flex-wrap: wrap; 
+    margin-left: 75px;
+}
+
+.options-header {
+    display: flex;
+    align-items: center;
+}
+
+.options-button {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    margin-bottom: 50px;
+    margin-left: 150px;
+    border: none;
+    background-color: #ffffff;
+    transition: background-color 0.8s ease;
+}
+
+.Help-button {
+    padding: 10px;
+    margin-left: 10px;
+    border: none;
+    background-color: #ffffff;
+    transition: background-color 0.8s ease;
+}
+
+.icon,.icon1 {
+    width: 40px; 
+    height: 40px; 
+    margin-bottom: 5px; 
+}
+.help-icon {
+    width: 30px;
+    height: 30px;
+}
+.text-container {
+    flex-grow: 1; 
+    display: flex;
+    justify-content: flex-start; 
+    align-items: center;
+}
+.options-text {
+    text-align: left;
+    width: 300px; 
+    font-family: Lato; 
+    margin-left: 25px;
+    font-size: 17px;
+}
+
+.heading{
+    width: 300px; 
+    height: 110px; 
+    color: black; 
+    font-size: 30px; 
+    font-family: Lato; 
+    font-weight: 400; 
+    margin-left: 150px; 
+    margin-top:75px; 
+    white-space: nowrap;
+}
+.options-button:hover {
+    background-color: #e6e3e3; 
+}
+.Help-button:hover {
+    background-color: #e6e3e3; 
+}
+.heading::after {
+    content: '';
+    width: calc(370% - 100px);
+    border-bottom: 1px rgba(171, 169, 169, 0.7) solid;
+    margin-top: 20px; 
+    display: block;
+}
+.options-container button:nth-child(3) {
+    margin-top: 0px; 
+}
+.buttons-container {
+    margin-left: 600px; 
+    display: flex;
+}
+
+.line_chart {
+    height: 45vh;
+    display: inline-block; 
+    vertical-align: top; 
+    width: 65vw; 
+    position: relative;
+}
+
+.pie_chart {
+    width: 25vw;
+    height: 47vh;
+    margin-left: -70px; 
+    display: inline-block; 
+    vertical-align: top; 
+    position: relative;
+}
+
+.bar_chart {
+    display: flex;
+    align-items: flex-start;
+    margin-left: 100px;
+    height: 45vh;
+    width: 40vw;
+}
+
+
+#data-display {
+    margin-left: 150px;
+    padding: 10px;
+    width: 300px; /* Adjust this width as needed */
+    height: 200px;
+    flex-shrink: 0;
+}
+

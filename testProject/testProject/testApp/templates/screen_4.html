@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400&display=swap" rel="stylesheet">
+    <script src="{% static 'script.js' %}" defer></script>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <link rel="stylesheet" href="{% static 'style_screen1.css' %}">
+    <link rel="stylesheet" href="{% static 'style_screen2.css' %}">
+    <title>Screen2</title>
+    
+</head>
+<body>
+   <div class="container-wrapper">
+    <div class ="icon-tab" style="width: 90px; height: 780px; background: #633F5A;">
+        <div class="icon-container" id="icon-container1">
+            <button class="button" onclick="changeColor('icon-container1','text','icon')">
+                <img src="{% static 'images/Canvas.png' %}" data-active-src="{% static 'images/Canvas_active.png' %}" alt="Canvas" class="icon" style="width: 50px; height: 50px;">
+                <div class="text">Home</div>
+            </button>
+        </div>
+    
+        <div class="icon-container"id="icon-container2" >
+            <button class="button" onclick="changeColor('icon-container2','text','icon')">
+                <img src="{% static 'images/Account.png' %}" data-active-src="{% static 'images/Account_active.png' %}" alt="Account" class="icon">
+                <div class="text">Account</div>
+            </button>
+        </div>
+    
+        <div class="icon-container" id="icon-container3">
+            <a style="text-decoration:none" href="{% url 'screen_2' %}">
+                <button class="button"  onclick="changeColor('icon-container3','text','icon')">
+                    <img src="{% static 'images/Advising.png' %}" data-active-src="{% static 'images/Advising_active.png' %}" alt="Advising" class="icon">
+                    <div class="text">Advising</div>
+                </button>
+            </a>
+        </div>
+    
+        <div class="icon-container" id="icon-container4">
+            <button class="button" onclick="changeColor('icon-container4','text','icon')">
+                <img src="{% static 'images/Calendar.png' %}" data-active-src="{% static 'images/Calendar_active.png' %}" alt="Calendar" class="icon">
+                <div class="text">Calendar</div>
+            </button>
+        </div>
+    
+        <div class="icon-container" id="icon-container5">
+            <button class="button" onclick="changeColor('icon-container5','text','icon')">
+                <img src="{% static 'images/Inbox.png' %}" data-active-src="{% static 'images/Inbox_active.png' %}" alt="Inbox" class="icon">
+                <div class="text">Inbox</div>
+            </button>
+        </div>
+        <div class="icon-container last-container" id="icon-container6">
+            <button class="button" id="backButton" onclick="changeColor('icon-container6','text','icon')">
+                <img src="{% static 'images/Go Back.png' %}" data-active-src="{% static 'images/Back_active.png' %}" alt="Back" class="icon">
+            </button>
+        </div>
+    </div>
+
+    <div>
+        <div class="options-header">
+            <div class="heading" id="heading"></div>
+            <div class="buttons-container">
+                <button id="bell" class="Help-button">
+                    <img src="{% static 'images/Bell.png' %}"  alt="Notification" class="help-icon">
+                </button>
+                <button id="Menu" class="Help-button">
+                    <img src="{% static 'images/Menu.png' %}"  alt="Menu" class="help-icon">
+                </button>
+            </div>
+        </div>
+
+        <form action="{% url 'screen_5' term=term %}" method="GET">
+            <div class="input-container">
+                <div class="label">Subject</div>
+                <input type="text" name="subject" class="input-box">
+            </div>
+        
+            <div class="input-container">
+                <div class="label">Course Number</div>
+                <input type="text" name="course_number" class="input-box">
+            </div>
+        
+            <button type="submit" class="dropdownbutton" style="margin-left: 100px; margin-top: 1px; margin-bottom: 20px;">
+                Continue
+            </button>
+        </form>        
+        
+    </div>
+</div>
+    <script>
+        // Function to parse query parameters from URL
+        function getQueryParam(name) {
+            name = name.replace(/[\[\]]/g, '\\$&');
+            var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+                results = regex.exec(window.location.href);
+            if (!results) return null;
+            if (!results[2]) return '';
+            return decodeURIComponent(results[2].replace(/\+/g, ' '));
+        }
+
+        // Get the value of the 'term' query parameter from the URL
+        var term = getQueryParam('term');
+        console.log(term)
+        // Display the term value on the page
+        var termContainer = document.getElementById('heading');
+        termContainer.innerText = term;
+        
+    </script>
+</body>
+</html>

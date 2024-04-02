@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400&display=swap" rel="stylesheet">
+    <script src="{% static 'script.js' %}" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <link rel="stylesheet" href="{% static 'style_screen1.css' %}">
+    <link rel="stylesheet" href="{% static 'style_screen2.css' %}">
+    <title>Screen7</title>
+    <script>
+        function renderChart(selectedCategory) {
+        // Get data for the chart from your Django view
+        var weightedScores = JSON.parse("{{ weighted_scores_json|escapejs }}");
+        // console.log('Weighted Scores:', weightedScores);
+        
+        // Check if the selected category exists in the data
+        if (selectedCategory in weightedScores) {
+            // console.log('Selected Category:', selectedCategory);
+            
+            // Extract category names and their assignments
+            var categoryData = weightedScores[selectedCategory];
+            var assignments = categoryData.assignments;
+            var categories = assignments.map(assignment => assignment.name);
+            var scores = assignments.map(assignment => assignment.grade);
+            var points_possible = assignments.map(assignment => assignment.points_possible);
+            var mean_score = assignments.map(assignment => assignment.score_statistics.mean_score)
+            var max_score = assignments.map(assignment => assignment.score_statistics.max_score)
+            var min_score = assignments.map(assignment => assignment.score_statistics.min_score)
+
+            // console.log('Categories:', categories);
+            // console.log('Scores:', scores);
+            
+            // Get canvas element
+            var ctx = document.getElementById('myChart').getContext('2d');
+
+            // Destroy existing chart instance if it exists
+            var existingChart = Chart.getChart('myChart');
+            if (existingChart) {
+                existingChart.destroy();
+            }
+
+            // Create chart
+            var myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: categories,
+                    datasets: [{
+                        label: 'Secured Points',
+                        data: scores,
+                        backgroundColor: 'rgba(99, 40, 90, 0.65)',
+                        borderColor: '#633F5A',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Total Points',
+                        data: points_possible,
+                        backgroundColor: 'rgba(166, 0, 4, 0.7)', 
+                        borderWidth: 0,
+                        pointRadius:5,
+                        pointStyle: 'rectRot',
+
+                    },
+                    {
+                        label: 'Mean Score',
+                        data: mean_score,
+                        backgroundColor: 'rgba(99, 40, 0, 0.65)', 
+                        borderWidth: 0,
+                        pointRadius:5
+                    },
+                    {
+                        label: 'Highest Score',
+                        data: max_score,
+                        backgroundColor: 'rgba(0, 59, 70, 0.7)', 
+                        borderWidth: 0,
+                        pointRadius:8,
+                        pointStyle: 'triangle',
+                    },
+                    {
+                        label: 'Lowest Score',
+                        data: min_score,
+                        backgroundColor: 'rgba(8, 58, 0, 0.65)', 
+                        borderWidth: 0,
+                        pointRadius:7,
+                        pointStyle: 'rectRounded',
+                    }
+                
+                ]
+                },
+                options: {
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: selectedCategory + ' Names',
+                                color: '#633F5A',
+                                font: {
+                                    family: 'Lato',
+                                    size: 15,
+                                    weight: 'bold',
+                                },
+                            },
+                        },
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Grades',
+                                color: '#633F5A',
+                                font: {
+                                    family: 'Lato',
+                                    size: 15,
+                                    weight: 'bold',
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: selectedCategory +' Analysis Chart',
+                            position: 'top',
+                            font: {
+                                    family: 'Lato',
+                                    size: 15,
+                                    weight: 'bold',
+                                },
+                            color:'#000000'
+                        },
+                        legend:{
+                                position : 'bottom',
+                                labels : {
+                                    usePointStyle: true,
+                                }
+                        },
+                    }
+                }
+            });
+
+                    // Extract category names and their weightages for pie chart
+            var assignmentGroupsWeightagesData = JSON.parse("{{ assignment_groups_weightages_json|escapejs }}");
+            var scoredassignmentGroupWeightsData = JSON.parse("{{total_weighted_scores_json|escapejs}}")
+            var assignmentGroupLabels = Object.keys(assignmentGroupsWeightagesData);
+            var assignmentGroupWeights = Object.values(assignmentGroupsWeightagesData);
+            var assignmentGroupWeightsData = Object.values(assignmentGroupWeights).map(function(category) {
+                return category.weight;
+            });
+            var scoredassignmentGroupLabels = Object.keys(scoredassignmentGroupWeightsData);
+            var scoredassignmentGroupWeights = Object.values(scoredassignmentGroupWeightsData);
+            
+            // console.log(assignmentGroupsWeightagesData)
+            // console.log('Labels:'+ assignmentGroupLabels)
+            // console.log('Data :'+ assignmentGroupWeightsData)
+            // console.log('Scored Labels:'+ scoredassignmentGroupLabels)
+            // console.log('Scored Data:'+ scoredassignmentGroupWeights)
+
+            // Get canvas element for pie chart
+            var pieCtx = document.getElementById('pieChart').getContext('2d');
+
+            // Destroy existing pie chart instance if it exists
+            var existingPieChart = Chart.getChart('pieChart');
+            if (existingPieChart) {
+                existingPieChart.destroy();
+            }
+            
+            // Create pie chart
+            var pieChart = new Chart(pieCtx, {
+                type: 'radar',
+                data: {
+                    labels: assignmentGroupLabels,
+                    datasets: [
+                    {
+                        label: 'Scored Weightage',
+                        data: scoredassignmentGroupWeights,
+                        backgroundColor: [
+                            'rgba(99,63,90,0.7)',
+                        ],
+                        borderColor: [
+                        'rgba(99,63,90)'
+                        ],
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Actual Weightage',
+                        data: assignmentGroupWeightsData,
+                        backgroundColor: [
+                            'rgba(209,192,168,0.5)',
+                        ],
+                        borderColor: [
+                        'rgba(176,161,140)'
+                        ],
+                        borderWidth: 1
+                    }
+                ]
+                },
+                options: {
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Categorical Grade Weightage Distribution',
+                        position: 'top',
+                        font: {
+                            family: 'Lato',
+                            size: 15,
+                            weight: 'bold'
+                        },
+                        color:'#000000'
+                    },
+                    legend: {
+                        position: 'bottom',
+                        labels : {
+                            usePointStyle: true,
+                        }
+                    },
+                },
+            }
+            });
+        } else {
+            console.error('Selected category does not exist or has no assignments.');
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Get the initially selected category
+        var selectedCategory = document.getElementById("category").value;
+        // Render the chart with the initially selected category
+        if (selectedCategory !== "Select a Category") {
+            renderChart(selectedCategory);
+        }
+    });
+    </script>
+</head>
+<body>
+   <div class="container-wrapper">
+    <div class ="icon-tab" style="width: 90px; height: 780px; background: #633F5A;">
+        <div class="icon-container" id="icon-container1">
+            <button class="button" onclick="changeColor('icon-container1','text','icon')">
+                <img src="{% static 'images/Canvas.png' %}" data-active-src="{% static 'images/Canvas_active.png' %}" alt="Canvas" class="icon" style="width: 50px; height: 50px;">
+                <div class="text">Home</div>
+            </button>
+        </div>
+    
+        <div class="icon-container"id="icon-container2" >
+            <button class="button" onclick="changeColor('icon-container2','text','icon')">
+                <img src="{% static 'images/Account.png' %}" data-active-src="{% static 'images/Account_active.png' %}" alt="Account" class="icon">
+                <div class="text">Account</div>
+            </button>
+        </div>
+    
+        <div class="icon-container" id="icon-container3">
+            <a style="text-decoration:none" href="{% url 'screen_2' %}">
+                <button class="button"  onclick="changeColor('icon-container3','text','icon')">
+                    <img src="{% static 'images/Advising.png' %}" data-active-src="{% static 'images/Advising_active.png' %}" alt="Advising" class="icon">
+                    <div class="text">Advising</div>
+                </button>
+            </a>
+        </div>
+    
+        <div class="icon-container" id="icon-container4">
+            <button class="button" onclick="changeColor('icon-container4','text','icon')">
+                <img src="{% static 'images/Calendar.png' %}" data-active-src="{% static 'images/Calendar_active.png' %}" alt="Calendar" class="icon">
+                <div class="text">Calendar</div>
+            </button>
+        </div>
+    
+        <div class="icon-container" id="icon-container5">
+            <button class="button" onclick="changeColor('icon-container5','text','icon')">
+                <img src="{% static 'images/Inbox.png' %}" data-active-src="{% static 'images/Inbox_active.png' %}" alt="Inbox" class="icon">
+                <div class="text">Inbox</div>
+            </button>
+        </div>
+        <div class="icon-container last-container" id="icon-container6">
+            <button class="button" id="backButton" onclick="changeColor('icon-container6','text','icon')">
+                <img src="{% static 'images/Go Back.png' %}" data-active-src="{% static 'images/Back_active.png' %}" alt="Back" class="icon">
+            </button>
+        </div>
+    </div>
+
+    <div>
+        <div class="options-header" style="margin-top: -20px;">
+            <div class="heading" id="heading">Course : <span style="color: #633F5A;">{{course_name}}</span></div>
+            <div class="buttons-container">
+                <button id="bell" class="Help-button">
+                    <img src="{% static 'images/Bell.png' %}"  alt="Notification" class="help-icon">
+                </button>
+                <button id="Menu" class="Help-button">
+                    <img src="{% static 'images/Menu.png' %}"  alt="Menu" class="help-icon">
+                </button>
+            </div>
+        </div>
+        <div class="container" style="margin-left: 175px;">
+            <div class="wrapper" style="display: inline-block;">
+                <div class="div-1">
+                    <h4 style="display: inline;">Student Name : </h4> <b><span style="color: #633F5A;">{{ student_name }}</span> </b>
+                </div>
+                <div class="div-1">
+                    {% if grade_info %}
+                        <h4 style="display: inline;">Percentage : </h4><b><span style="color: #633F5A;">{{ grade_info.current_score }}%</span></b>
+                    {% endif %}
+                </div>
+                <div class="div-1" style="margin-bottom: 15px;">
+                    {% if grade_info %}
+                        <h4 style="display: inline;">Grade : </h4><b><span style="color: #633F5A;">{{ grade_info.current_grade }}</span></b>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="wrapper" style="display: inline-block; margin-left: 230px;vertical-align: top;">
+                <div class="category_section" >
+                    <label for="category"><b>Assessment Type :</b> </label>
+                    <select id="category" onchange="filterAssignments()">
+                        <option>Select a Category</option>
+                        {% for group_name, _ in categorized_assignment_grades.items %}
+                        <option value="{{ group_name }}">{{ group_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="view-options" style="margin-top: 30px;">
+                    <label for="view-select"><b>Select View :</b></label>
+                    <select id="view-select" onchange="toggleView()">
+                        <option value="empty">Select a View</option>
+                        <option value="table">Tablular View</option>
+                        <option value="graphical">Graphical View</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    
+        
+        <div class="category_section" id="table-view" style="display: none;">
+            <h4 style="margin-left: 175px;">Tabular View :</h4>
+            <table id="assignmentTable" style="margin-top: 40px;">
+                <thead>
+                    <tr>
+                        <th> Category </th>
+                        <th> Secured Grade Proportion / Actual Weightage (%)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for category, score in weighted_scores.items %}
+                        {% for group_name, weightage_info in assignment_groups_weightages.items %}
+                            {% if category == group_name %}
+                                <tr class="assignment-item" data-category="{{ category }}">
+                                    <td>{{ category }}</td>
+                                    <td>{{ score|floatformat:"2" }} / {{ weightage_info.weight }}</td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                    {% endfor %}
+                </tbody>
+                <thead>
+                    <tr>
+                        <th> Name </th>
+                        <th> Secured Grade / Total Grade </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for group_name, data in categorized_assignment_grades.items %}
+                        {% for assignment in data.assignments %}
+                            <tr class="assignment-item" data-category="{{ group_name }}">
+                                <td>{{ assignment.name }}</td>
+                                <td>{{ assignment.grade }} / {{assignment.points_possible}}</td>
+                            </tr>
+                        {% endfor %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="chart_category_section" id="graphical-view" style="display: none;">
+            <h4 style="margin-left: 175px;">Graphical View :</h4>
+            <div class="line_chart">
+                <canvas id="myChart" style="margin-left: 100px; margin-top: 5px;"></canvas>
+            </div>
+            <div class="pie_chart">
+                <canvas id="pieChart"></canvas>
+            </div>
+        </div>
+        
+        
+    </div>
+</div>
+
+</body>
+</html>

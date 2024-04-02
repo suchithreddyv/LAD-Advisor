@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400&display=swap" rel="stylesheet">
+    <script src="{% static 'script.js' %}" defer></script>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <title>Canvas API Integration</title>
+</head>
+<body>
+   <div class="container-wrapper">
+    <div class ="icon-tab" style="width: 90px; height: 780px; background: #633F5A;">
+        <div class="icon-container" id="icon-container1">
+            <button class="button" onclick="changeColor('icon-container1','text','icon')">
+                <img src="{% static 'images/Canvas.png' %}" data-active-src="{% static 'images/Canvas_active.png' %}" alt="Canvas" class="icon" style="width: 50px; height: 50px;">
+                <div class="text">Home</div>
+            </button>
+        </div>
+    
+        <div class="icon-container"id="icon-container2" >
+            <button class="button" onclick="changeColor('icon-container2','text','icon')">
+                <img src="{% static 'images/Account.png' %}" data-active-src="{% static 'images/Account_active.png' %}" alt="Account" class="icon">
+                <div class="text">Account</div>
+            </button>
+        </div>
+    
+        <div class="icon-container" id="icon-container3">
+        <a style="text-decoration:none" href="{% url 'screen_2' %}">
+            <button class="button"  onclick="changeColor('icon-container3','text','icon')">
+                <img src="{% static 'images/Advising.png' %}" data-active-src="{% static 'images/Advising_active.png' %}" alt="Advising" class="icon">
+                <div class="text">Advising</div>
+            </button>
+        </a>
+        </div>
+    
+        <div class="icon-container" id="icon-container4">
+            <button class="button" onclick="changeColor('icon-container4','text','icon')">
+                <img src="{% static 'images/Calendar.png' %}" data-active-src="{% static 'images/Calendar_active.png' %}" alt="Calendar" class="icon">
+                <div class="text">Calendar</div>
+            </button>
+        </div>
+    
+        <div class="icon-container" id="icon-container5">
+            <button class="button" onclick="changeColor('icon-container5','text','icon')">
+                <img src="{% static 'images/Inbox.png' %}" data-active-src="{% static 'images/Inbox_active.png' %}" alt="Inbox" class="icon">
+                <div class="text">Inbox</div>
+            </button>
+        </div>
+        <div class="icon-container last-container" id="icon-container6">
+            <button class="button" id="backButton" onclick="changeColor('icon-container6','text','icon')">
+                <img src="{% static 'images/Go Back.png' %}" data-active-src="{% static 'images/Back_active.png' %}" alt="Back" class="icon">
+            </button>
+        </div>
+    </div>
+
+    </div>
+</body>
+</html>

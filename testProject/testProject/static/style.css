@@ -1,0 +1,67 @@
+
+body {
+    font-family: Lato, sans-serif;
+    background-color: #ffffff;
+    margin: 0;
+    padding: 0px;
+}
+
+.icon-container {
+    width: 80px;
+    height: 80px;
+    text-align: center;
+    background: #633F5A;
+    padding: 5px;
+    transition: background-color 0.8s ease;
+}
+.icon-container:hover {
+    background-color: #412c3b; 
+}
+
+.icon-container:last-child {
+    position: absolute;
+    bottom: 0;
+}
+
+.icon-container.active {
+background-color: #ffffff;
+}
+
+.icon {
+    width: 40px;
+    height: 40px;
+    display: block;
+    margin: 0 auto;
+}
+
+.text {
+    width: 70px;
+    height: 31px;
+    color: white;
+    font-size: 15px;
+    font-family: 'Lato', sans-serif;
+    word-wrap: break-word;
+}
+.text.active{
+    color: #633F5A !important;
+}
+.button {
+    width: 80px;
+    height: 80px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    outline: none;
+
+}
+
+.container-wrapper {
+    display: flex;
+}
+
+#datacontainer {
+    flex: 1; /* Take up remaining space */
+    background-color: lightblue; /* Just for visualization */
+}
+
+
