@@ -35,3 +35,42 @@ def start():
     
     ensure_unique_schedule(task_path, task_schedule_type, **task_kwargs)
 
+from datetime import datetime, time
+import time
+import logging
+from apscheduler.schedulers.background import BackgroundScheduler
+from django.conf import settings
+from testApp.views import update_all_students_grades
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+def start():
+    logger.info("Starting the scheduler.")
+    scheduler = BackgroundScheduler(timezone=settings.TIME_ZONE)
+
+    # Adding a job to the scheduler
+    scheduler.add_job(
+        update_all_students_grades,
+        'cron',
+        day_of_week='sun',
+        hour=23,
+        minute=59,
+        id='update_grades_weekly',
+        next_run_time=datetime.now()  # Optionally start immediately
+    )
+    logger.info("Added job: update_all_students_grades, to run every 10 minutes.")
+
+    # Starting the scheduler
+    scheduler.start()
+    logger.info("Scheduler started.")
+
+    # This is required to keep the main thread alive.
+    try:
+        while True:
+            time.sleep(2)
+    except (KeyboardInterrupt, SystemExit):
+        # Not strictly necessary if shutting down on Ctrl+C, but should be done if shutdown must be clean
+        scheduler.shutdown()
+        logger.info("Scheduler shut down.")
